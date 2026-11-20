@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102d48">
+
+<title>TrackOne Blood Pressure Pro</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- PDF generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f0f4f8;
+    color: #25364a;
+}
+
+header {
+    background: linear-gradient(135deg,#102d48,#17649a);
+    color: white;
+    padding: 23px 18px;
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #63d5ff;
+}
+
+header p {
+    margin-top: 8px;
+    color: #d5e9f7;
+    font-size: 13px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 22px auto;
+    padding: 0 15px;
+}
+
+.welcome {
+    margin-bottom: 22px;
+}
+
+.welcome h2 {
+    font-size: 23px;
+    color: #102d48;
+}
+
+.welcome p {
+    color: #718096;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.card {
+    background: white;
+    border-radius: 13px;
+    padding: 20px;
+    box-shadow: 0 3px 12px #0000000c;
+}
+
+.card h4 {
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 13px;
+}
+
+.card h2 {
+    font-size: 27px;
+    color: #102d48;
+}
+
+.card small {
+    color: #8493a5;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 13px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px #0000000c;
+}
+
+.panel h3 {
+    color: #102d48;
+    margin-bottom: 18px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 13px;
+    margin-top: 7px;
+    margin-bottom: 15px;
+    border: 1px solid #dce4ec;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+input:focus, textarea:focus {
+    border-color: #2186c4;
+}
+
+label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #43546a;
+}
+
+button {
+    padding: 12px 17px;
+    border: none;
+    border-radius: 8px;
+    background: #17649a;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 4px 3px 4px 0;
+}
+
+button:hover {
+    opacity: .88;
+}
+
+.green {
+    background: #15966a;
+}
+
+.red {
+    background: #d94343;
+}
+
+.dark {
+    background: #102d48;
+}
+
+.chart-container {
+    height: 280px;
+    position: relative;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 600px;
+}
+
+th, td {
+    text-align: left;
+    padding: 13px 10px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+th {
+    background: #f3f7fa;
+    color: #526477;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.status {
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    background: #e8f2fa;
+    color: #17649a;
+}
+
+.notice {
+    background: #fff8e5;
+    border-left: 4px solid #e5a62b;
+    padding: 14px;
+    border-radius: 6px;
+    line-height: 1.6;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #8290a0;
+    font-size: 12px;
+}
+
+@media(max-width:750px) {
+    .cards {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:400px) {
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .card h2 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-content">
+    <div class="logo">♥ TRACKONE <span>HEALTH PRO</span></div>
+    <p>Professional Blood Pressure Monitoring System</p>
+</div>
+</header>
+
+<main class="container">
+
+<div class="welcome">
+    <h2>Health Dashboard</h2>
+    <p>Monitor your recorded measurements and health trends.</p>
+</div>
+
+<div class="notice">
+    <strong>Health information:</strong>
+    This application stores measurements; it does not measure blood
+    pressure itself or diagnose medical conditions. Use a validated
+    blood pressure monitor and consult a healthcare professional
+    about interpreting readings. Adult reference categories should
+    not be used to interpret readings for children or teenagers.
+</div>
+
+<!-- DASHBOARD CARDS -->
+
+<div class="cards">
+
+    <div class="card">
+        <h4>Latest Systolic</h4>
+        <h2 id="latestSys">--</h2>
+        <small>mmHg</small>
+    </div>
+
+    <div class="card">
+        <h4>Latest Diastolic</h4>
+        <h2 id="latestDia">--</h2>
+        <small>mmHg</small>
+    </div>
+
+    <div class="card">
+        <h4>Latest Pulse</h4>
+        <h2 id="latestPulse">--</h2>
+        <small>BPM</small>
+    </div>
+
+    <div class="card">
+        <h4>Total Records</h4>
+        <h2 id="totalRecords">0</h2>
+        <small>Saved measurements</small>
+    </div>
+
+</div>
+
+<!-- ADD READING -->
+
+<div class="panel">
+
+<h3>＋ Record Blood Pressure</h3>
+
+<div class="grid">
+
+    <div>
+        <label>Systolic Pressure (mmHg)</label>
+        <input type="number" id="sys" placeholder="e.g. 120"
+        min="40" max="300">
+
+        <label>Diastolic Pressure (mmHg)</label>
+        <input type="number" id="dia" placeholder="e.g. 80"
+        min="20" max="200">
+
+        <label>Pulse Rate (BPM)</label>
+        <input type="number" id="pulse" placeholder="e.g. 72"
+        min="20" max="250">
+    </div>
+
+    <div>
+        <label>Date and Time</label>
+        <input type="datetime-local" id="readingDate">
+
+        <label>Additional Notes</label>
+        <textarea id="notes" rows="5"
+        placeholder="Enter optional notes..."></textarea>
+    </div>
+
+</div>
+
+<button onclick="saveReading()" class="green">
+    SAVE MEASUREMENT
+</button>
+
+<button onclick="clearForm()" class="dark">
+    CLEAR FORM
+</button>
+
+</div>
+
+<!-- CHARTS -->
+
+<div class="panel">
+
+<h3>Blood Pressure Trends</h3>
+
+<div class="chart-container">
+    <canvas id="bpChart"></canvas>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Pulse Rate History</h3>
+
+<div class="chart-container">
+    <canvas id="pulseChart"></canvas>
+</div>
+
+</div>
+
+<!-- REMINDERS -->
+
+<div class="panel">
+
+<h3>⏰ Measurement Reminder</h3>
+
+<label>Reminder Time</label>
+
+<input type="time" id="reminderTime" value="08:00">
+
+<label>
+<input type="checkbox" id="reminderEnabled"
+style="width:auto;margin:10px 5px;">
+Enable daily reminder
+</label>
+
+<br>
+
+<button onclick="saveReminder()" class="green">
+    SAVE REMINDER
+</button>
+
+<p id="reminderStatus" style="margin-top:10px;font-size:13px;">
+    No reminder scheduled.
+</p>
+
+</div>
+
+<!-- HISTORY -->
+
+<div class="panel">
+
+<h3>Measurement History</h3>
+
+<input type="search" id="search"
+placeholder="Search measurement history..."
+oninput="renderHistory()">
+
+<div class="table-wrapper">
+
+<table>
+<thead>
+<tr>
+    <th>Date</th>
+    <th>Systolic</th>
+    <th>Diastolic</th>
+    <th>Pulse</th>
+    <th>Notes</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody id="history"></tbody>
+
+</table>
+
+</div>
+
+<br>
+
+<button onclick="generatePDF()" class="green">
+    DOWNLOAD PDF REPORT
+</button>
+
+<button onclick="exportCSV()" class="dark">
+    EXPORT CSV
+</button>
+
+</div>
+
+<!-- INFORMATION -->
+
+<div class="panel">
+
+<h3>About TrackOne Health Pro</h3>
+
+<p style="line-height:1.8;font-size:14px;">
+TrackOne Blood Pressure Pro is a personal measurement recording
+application designed to help users organize their blood pressure
+and pulse readings. It provides charts, measurement history,
+reminders and downloadable reports.
+</p>
+
+</div>
+
+</main>
+
+<footer>
+    TRACKONE HEALTH PRO © 2026<br>
+    Personal Health Monitoring Application
+</footer>
+
+<script>
+
+// =====================================
+// DATABASE USING LOCAL STORAGE
+// =====================================
+
+let readings = JSON.parse(
+    localStorage.getItem("trackone_readings") || "[]"
+);
+
+let bpChart = null;
+let pulseChart = null;
+
+function saveDatabase() {
+    localStorage.setItem(
+        "trackone_readings",
+        JSON.stringify(readings)
+    );
+}
+
+// =====================================
+// SET DEFAULT DATE
+// =====================================
+
+function setDefaultDate() {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() -
+        now.getTimezoneOffset());
+
+    document.getElementById("readingDate").value =
+        now.toISOString().slice(0,16);
+}
+
+setDefaultDate();
+
+// =====================================
+// SAVE READING
+// =====================================
+
+function saveReading() {
+
+    const sys = Number(document.getElementById("sys").value);
+    const dia = Number(document.getElementById("dia").value);
+    const pulse = Number(document.getElementById("pulse").value);
+
+    const date = document.getElementById("readingDate").value;
+
+    const notes = document.getElementById("notes").value;
+
+    if (!sys || !dia || !pulse || !date) {
+        alert("Please complete all required measurement fields.");
+        return;
+    }
+
+    if (
+        !Number.isInteger(sys) ||
+        !Number.isInteger(dia) ||
+        !Number.isInteger(pulse) ||
+        sys < 40 || sys > 300 ||
+        dia < 20 || dia > 200 ||
+        pulse < 20 || pulse > 250 ||
+        dia >= sys
+    ) {
+        alert("Please check the measurement values.");
+        return;
+    }
+
+    readings.push({
+        id: Date.now() + Math.random(),
+        sys: sys,
+        dia: dia,
+        pulse: pulse,
+        date: date,
+        notes: notes
+    });
+
+    saveDatabase();
+
+    clearForm();
+    updateDashboard();
+
+    alert("Measurement saved successfully!");
+}
+
+// =====================================
+// CLEAR FORM
+// =====================================
+
+function clearForm() {
+
+    document.getElementById("sys").value = "";
+    document.getElementById("dia").value = "";
+    document.getElementById("pulse").value = "";
+    document.getElementById("notes").value = "";
+
+    setDefaultDate();
+}
+
+// =====================================
+// DASHBOARD
+// =====================================
+
+function updateDashboard() {
+
+    const sorted = [...readings].sort(
+        (a,b) => new Date(a.date) - new Date(b.date)
+    );
+
+    const latest = sorted[sorted.length - 1];
+
+    document.getElementById("totalRecords").textContent =
+        readings.length;
+
+    document.getElementById("latestSys").textContent =
+        latest ? latest.sys : "--";
+
+    document.getElementById("latestDia").textContent =
+        latest ? latest.dia : "--";
+
+    document.getElementById("latestPulse").textContent =
+        latest ? latest.pulse : "--";
+
+    renderHistory();
+    drawCharts();
+}
+
+// =====================================
+// HISTORY
+// =====================================
+
+function renderHistory() {
+
+    const tbody = document.getElementById("history");
+
+    const search = document.getElementById("search")
+        .value.toLowerCase();
+
+    tbody.innerHTML = "";
+
+    const sorted = [...readings].sort(
+        (a,b) => new Date(b.date) - new Date(a.date)
+    );
+
+    sorted.filter(r =>
+        r.date.toLowerCase().includes(search) ||
+        r.notes.toLowerCase().includes(search)
+    ).forEach(r => {
+
+        const tr = document.createElement("tr");
+
+        const date = new Date(r.date).toLocaleString();
+
+        const values = [
+            date,
+            r.sys + " mmHg",
+            r.dia + " mmHg",
+            r.pulse + " BPM",
+            r.notes
+        ];
+
+        values.forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.appendChild(td);
+        });
+
+        const action = document.createElement("td");
+
+        const del = document.createElement("button");
+        del.textContent = "Delete";
+        del.className = "red";
+
+        del.onclick = () => deleteReading(r.id);
+
+        action.appendChild(del);
+        tr.appendChild(action);
+
+        tbody.appendChild(tr);
+    });
+}
+
+// =====================================
+// DELETE RECORD
+// =====================================
+
+function deleteReading(id) {
+
+    if (!confirm("Delete this measurement?")) return;
+
+    readings = readings.filter(r => r.id !== id);
+
+    saveDatabase();
+    updateDashboard();
+}
+
+// =====================================
+// CHARTS
+// =====================================
+
+function drawCharts() {
+
+    const sorted = [...readings].sort(
+        (a,b) => new Date(a.date) - new Date(b.date)
+    );
+
+    const labels = sorted.map(r =>
+        new Date(r.date).toLocaleDateString()
+    );
+
+    if (bpChart) bpChart.destroy();
+
+    bpChart = new Chart(
+        document.getElementById("bpChart"),
+        {
+            type: "line",
+
+            data: {
+                labels: labels,
+
+                datasets: [
+                    {
+                        label: "Systolic",
+                        data: sorted.map(r => r.sys),
+                        borderColor: "#17649a",
+                        backgroundColor: "#17649a",
+                        tension: 0.3
+                    },
+                    {
+                        label: "Diastolic",
+                        data: sorted.map(r => r.dia),
+                        borderColor: "#e5a62b",
+                        backgroundColor: "#e5a62b",
+                        tension: 0.3
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        }
+    );
+
+    if (pulseChart) pulseChart.destroy();
+
+    pulseChart = new Chart(
+        document.getElementById("pulseChart"),
+        {
+            type: "bar",
+
+            data: {
+                labels: labels,
+
+                datasets: [{
+                    label: "Pulse BPM",
+                    data: sorted.map(r => r.pulse),
+                    backgroundColor: "#15966a"
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        }
+    );
+}
+
+// =====================================
+// PDF REPORT
+// =====================================
+
+function generatePDF() {
+
+    if (readings.length === 0) {
+        alert("No measurements available for reporting.");
+        return;
+    }
+
+    if (!window.jspdf) {
+        alert("PDF library is unavailable. Check your internet connection.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF();
+
+    pdf.setFontSize(20);
+    pdf.text("TRACKONE HEALTH PRO", 15, 20);
+
+    pdf.setFontSize(12);
+    pdf.text("Blood Pressure Measurement Report", 15, 30);
+
+    pdf.text(
+        "Generated: " + new Date().toLocaleString(),
+        15, 39
+    );
+
+    pdf.setFontSize(10);
+
+    let y = 53;
+
+    pdf.text(
+        "DATE                  SYSTOLIC   DIASTOLIC   PULSE",
+        15, y
+    );
+
+    y += 8;
+
+    readings
+        .slice()
+        .sort((a,b) => new Date(a.date) - new Date(b.date))
+        .forEach(r => {
+
+            if (y > 270) {
+                pdf.addPage();
+                y = 20;
+            }
+
+            const date = new Date(r.date).toLocaleString();
+
+            pdf.text(
+                date + "     " +
+                r.sys + "          " +
+                r.dia + "          " +
+                r.pulse,
+                15, y
+            );
+
+            y += 8;
+
+            if (r.notes) {
+                const lines = pdf.splitTextToSize(
+                    "Notes: " + r.notes, 175
+                );
+
+                pdf.text(lines, 15, y);
+                y += lines.length * 5;
+            }
+        });
+
+    pdf.save("TrackOne_Blood_Pressure_Report.pdf");
+}
+
+// =====================================
+// CSV EXPORT
+// =====================================
+
+function exportCSV() {
+
+    if (readings.length === 0) {
+        alert("No records to export.");
+        return;
+    }
+
+    const rows = [
+        ["Date", "Systolic", "Diastolic", "Pulse", "Notes"]
+    ];
+
+    readings.forEach(r => {
+        rows.push([
+            r.date,
+            r.sys,
+            r.dia,
+            r.pulse,
+            r.notes
+        ]);
+    });
+
+    const csv = rows.map(row =>
+        row.map(value =>
+            '"' + String(value).replace(/"/g,'""') + '"'
+        ).join(",")
+    ).join("\n");
+
+    const blob = new Blob(
+        ["\uFEFF" + csv],
+        {type: "text/csv;charset=utf-8;"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "TrackOne_BP_History.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+// =====================================
+// DAILY REMINDER
+// =====================================
+
+let reminderInterval = null;
+
+function saveReminder() {
+
+    const enabled =
+        document.getElementById("reminderEnabled").checked;
+
+    const time =
+        document.getElementById("reminderTime").value;
+
+    if (!time) {
+        alert("Select a reminder time.");
+        return;
+    }
+
+    const settings = {
+        enabled: enabled,
+        time: time
+    };
+
+    localStorage.setItem(
+        "trackone_reminder",
+        JSON.stringify(settings)
+    );
+
+    if (enabled && "Notification" in window) {
+
+        if (Notification.permission === "default") {
+            Notification.requestPermission().then(
+                permission => {
+                    if (permission === "granted") {
+                        startReminder();
+                    } else {
+                        showReminderStatus();
+                    }
+                }
+            );
+        } else {
+            startReminder();
+        }
+
+    } else {
+        stopReminder();
+    }
+
+    showReminderStatus();
+}
+
+function startReminder() {
+
+    stopReminder();
+
+    reminderInterval = setInterval(checkReminder, 30000);
+
+    checkReminder();
+}
+
+function stopReminder() {
+
+    if (reminderInterval) {
+        clearInterval(reminderInterval);
+        reminderInterval = null;
+    }
+}
+
+function checkReminder() {
+
+    const settings = JSON.parse(
+        localStorage.getItem("trackone_reminder") || "{}"
+    );
+
+    if (!settings.enabled) return;
+
+    const now = new Date();
+
+    const currentTime =
+        String(now.getHours()).padStart(2,"0") + ":" +
+        String(now.getMinutes()).padStart(2,"0");
+
+    const today = now.toISOString().slice(0,10);
+
+    const lastReminder =
+        localStorage.getItem("trackone_last_reminder");
+
+    if (
+        currentTime === settings.time &&
+        lastReminder !== today &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+    ) {
+
+        new Notification("TrackOne Health Pro", {
+            body: "Your scheduled measurement reminder is due."
+        });
+
+        localStorage.setItem(
+            "trackone_last_reminder", today
+        );
+    }
+}
+
+function showReminderStatus() {
+
+    const settings = JSON.parse(
+        localStorage.getItem("trackone_reminder") || "{}"
+    );
+
+    document.getElementById("reminderStatus").textContent =
+        settings.enabled
+        ? "Daily reminder set for " + settings.time +
+          ". Keep the app open for browser reminders."
+        : "No reminder scheduled.";
+}
+
+// =====================================
+// LOAD SAVED SETTINGS
+// =====================================
+
+function loadReminder() {
+
+    const settings = JSON.parse(
+        localStorage.getItem("trackone_reminder") || "{}"
+    );
+
+    if (settings.time) {
+        document.getElementById("reminderTime").value =
+            settings.time;
+    }
+
+    document.getElementById("reminderEnabled").checked =
+        !!settings.enabled;
+
+    showReminderStatus();
+
+    if (
+        settings.enabled &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+    ) {
+        startReminder();
+    }
+}
+
+// =====================================
+// INITIALIZE APPLICATION
+// =====================================
+
+updateDashboard();
+loadReminder();
+
+</script>
+
+</body>
+</html>
